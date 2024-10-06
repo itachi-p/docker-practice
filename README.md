@@ -24,6 +24,10 @@
   - `docker (container) exec`
 - [x] 10２部: イメージの基礎
 - [ ] 11２部: Dockerfile の基礎
+  - `$ docker (image) build [option] <path>`
+    - -f Dockerfileを指定する（複数のDockerfileを使い分ける）
+    - -t ビルド結果にタグ付けし、把握しやすくする
+  - `$ docker (image) history [option] <image>`
 
 
 #### TIPS（覚え書き）
