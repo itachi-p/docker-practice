@@ -14,7 +14,7 @@ RUN apt update
 RUN apt install -y vim
 
 # インストールしたVimの設定ファイルをローカルからコンテナ内部へコピー
-COPY .vimrc /root/.vimrc
+COPY docker/date/.vimrc /root/.vimrc
 
 # コンテナが起動した際に実行されるデフォルト命令を指定
 # 以下の書き方は非推奨 (実行されるが、warningが出る)
