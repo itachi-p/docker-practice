@@ -81,10 +81,15 @@
     - Dockerfileは`FROM mysql:5.7`とした上で、ビルド時に`--platform=linux/amd64`とオプションを付ける
   - MySQL の設定ファイルを追加
     - 内容はDockerというよりMySQLについて調べる
+    > [参考:基礎MySQL my.cnf (設定ファイル)](https://qiita.com/yoheiW@github/items/bcbcd11e89bfc7d7f3ff)
   - M1系MacでMySQL5.7系を使う場合のビルド(8.0系ならアーキテクチャはarm64/v8を選ぶ)
     - `docker build --platform=linux/amd64 -t docker-practice:db -f docker/db/Dockerfile .`
-- [ ] 14３部: コンテナの起動
+  - `docker-compose.yml`の中でplatformの指定もできる（毎回手動でオプションを付ける手間が省ける）
+- [x] 14３部: コンテナの起動
+  - MySQLコンテナ起動には環境変数の指定が必要(docker-compose.ymlに書ける)
+    - `MYSQL_ROOT_PASSWORD`,`MYSQL_USER`,`MYSQL_PASSWORD`,`MYSQL_DATABASE`
 - [ ] 15３部: ボリューム
+  - コンテナの終了と共に全てが消滅せず、データをホスト側に永続化させられるようにする
 - [ ] 16３部: バインドマウント
 - [ ] 17３部: ポート
 - [ ] 18３部: ネットワーク
