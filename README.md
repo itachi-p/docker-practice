@@ -75,10 +75,14 @@
   - (確認用コマンド群のインストール)
     - `docker build -t docker-practice:app -f docker/app/Dockerfile .`
   - [x] DBイメージのビルド
-  - MySQL5.7系を使う場合(8.0系ならアーキテクチャはarm64/v8を選ぶ)
-  - ベースイメージの指定(MySQL5.7)
+  - ベースイメージの指定(Appleシリコン製MacでMySQL5.7を使う場合)
+    - MySQL5.7系にはlinux/arm64/v8アーキテクチャが存在しない
+    - `FROM --platform=linux/amd64 mysql:5.7`は非推奨(環境依存性が高まる為)
+    - Dockerfileは`FROM mysql:5.7`とした上で、ビルド時に`--platform=linux/amd64`とオプションを付ける
   - MySQL の設定ファイルを追加
-  - `docker build --platform=linux/amd64 -t docker-practice:db -f docker/db/Dockerfile .`
+    - 内容はDockerというよりMySQLについて調べる
+  - M1系MacでMySQL5.7系を使う場合のビルド(8.0系ならアーキテクチャはarm64/v8を選ぶ)
+    - `docker build --platform=linux/amd64 -t docker-practice:db -f docker/db/Dockerfile .`
 - [ ] 14３部: コンテナの起動
 - [ ] 15３部: ボリューム
 - [ ] 16３部: バインドマウント
