@@ -88,8 +88,14 @@
 - [x] 14３部: コンテナの起動
   - MySQLコンテナ起動には環境変数の指定が必要(docker-compose.ymlに書ける)
     - `MYSQL_ROOT_PASSWORD`,`MYSQL_USER`,`MYSQL_PASSWORD`,`MYSQL_DATABASE`
-- [ ] 15３部: ボリューム
+- [x] 15３部: ボリューム
   - コンテナの終了と共に全てが消滅せず、データをホスト側に永続化させられるようにする
+  - `$ docker volume create [option]`
+  - `--volume`と`--mount`2つのオプションはどちらも同じような結果
+    - volumeの方が短く書けるが、mountの方を推奨
+    - mountの方が`docker-compose`と互いに読み替え易いメリットがある
+    - volumeの実体の詳細確認
+      - `$ docker volume inspect docker-practice-db-volume`
 - [ ] 16３部: バインドマウント
 - [ ] 17３部: ポート
 - [ ] 18３部: ネットワーク
