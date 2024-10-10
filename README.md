@@ -96,7 +96,13 @@
     - mountの方が`docker-compose`と互いに読み替え易いメリットがある
     - volumeの実体の詳細確認
       - `$ docker volume inspect docker-practice-db-volume`
-- [ ] 16３部: バインドマウント
+- [x] 16３部: バインドマウント
+  - [x] AppコンテナにPHPソースコードをマウントする
+    - 既存のPHPディレクトリをそのままマウント→変更が即時反映されるようにできる
+    - この場合も`--volume`と`--mount`どちらも使えるが、mountの方が後々望ましい
+    - さらにPHPのビルトインサーバのドキュメントルートをソースコードのある/srcに変更
+  - [x] DBコンテナに初期化クエリ(テーブル作成)をマウントする
+    - ただし初期化クエリは既にデータが存在する場合は実行されない
 - [ ] 17３部: ポート
 - [ ] 18３部: ネットワーク
 - [ ] 19３部: Docker Compose
@@ -112,3 +118,47 @@
 - COPY を書くときは、その製品の知識(設定ファイルの書き方)が必要
 - 手順が定かでない場合、 まずはコンテナを起動し内部で手作業してみるのが有効
 - 上記の手順を経てレイヤーを重ねる操作が確定してから最後にDockerfileを書く
+
+##### バインドマウント
+
+###### AppコンテナにPHPソースコードをマウントする
+
+コンテナ内部とホスト側と双方向で変更に関心がある場合。
+PHPのソースコード変更に対し、転送などの作業不要で即時反映されるようになる。
+コンテナ内部及びホスト側での変更（ファイルやディレクトリ削除も含む）が完全に一致する。
+
+```bash
+docker run --name app --rm --detach -it \
+      --mount type=bind,src=$(pwd)/src,dst=/src \
+      docker-practice:app php -S 0.0.0.0:8000 -t /src
+```
+
+***＊＊要注意事項＊＊***
+ボリュームの一方向性（たとえコンテナ側で全削除してもホスト側に影響がない）に比べて、バインドマウントは使い捨てのコンテナだからと気軽に`rm -rf *`などやるとホスト側の同ディレクトリに波及して**えらいこと**になりかねない。
+
+###### SQL5.7イメージの拡張機能
+
+コンテナ起動時に`/docker-entrypoint-initdb.d`に存在する .sql を実行してくれる拡張がされている。
+これを利用し、コンテナ起動時にvolumeをマウントすると共に、テーブル初期化も行える。
+
+```bash
+$ docker run --name db --rm --detach --platform linux/amd64 \
+       --env MYSQL_ROOT_PASSWORD=root --env MYSQL_USER=user \
+       --env MYSQL_PASSWORD=pass --env MYSQL_DATABASE=event \
+       --mount type=volume,src=docker-practice-db-volume,dst=/var/lib/mysql \
+       --mount type=bind,src=$(pwd)/docker/db/init.sql,dst=/docker-entrypoint-initdb.d/init.sql \
+       docker-practice:db
+```
+
+上記の後、dbコンテナ内部に接続してテーブルの存在確認ができればOK
+
+```bash
+$ docker exec -it db mysql -h localhost -u user -ppass event
+
+>mysql show tables;
++-----------------+
+| Tables_in_event |
++-----------------+
+| mail            |
++-----------------+
+```
