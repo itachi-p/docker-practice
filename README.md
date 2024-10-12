@@ -106,6 +106,14 @@
 - [x] 17３部: ポート
   - コンテナのポートをホストマシンに公開し、ブラウザからアクセスできるようにする
 - [ ] 18３部: ネットワーク
+  - コンテナ間で通信できるようにする（ポートでは解決できなかった問題）
+  - `$ docker network create [option] name`
+  - `$ docker network ls`
+  - execサブコマンドでpingを使って疎通の確認
+    - `docker container exec -it app ping db -c 3`
+  - [x] App コンテナから DB コンテナへの接続設定
+    - src/history.php & src/mail.php
+  - [ ] AppコンテナからMailコンテナへの接続設定
 - [ ] 19３部: Docker Compose
 - [ ] 20３部: デバッグノウハウ ( 番外編 )
 - [ ] 21おわりに
