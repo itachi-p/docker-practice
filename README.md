@@ -120,6 +120,8 @@
 - [ ] 19３部: Docker Compose
   - これまでのdockerコマンド(buildやrunなど)を全てdocker-compose.yamlに置き換える
     - （ただし一部の`container exec`によるデバッグ操作は対象外）
+  - `$ docker compose up [option]`
+    - `-d`オプションでバックグラウンド実行（ターミナルが固まるのを避ける）
 - [ ] 20３部: デバッグノウハウ ( 番外編 )
 - [ ] 21おわりに
 
@@ -184,7 +186,7 @@ $ docker exec -it db mysql -h localhost -u user -ppass event
 **ホストマシン側のポート番号は任意だが、1024番以下は予約番号のため避ける**
 *8000番台も使われていることが多い。競合した場合、正常な動作は期待できない*
 
-###### M1傾倒MacでのPlatformの指定について
+###### M1系統(Appleシリコン)MacでのPlatformの指定について
 
 - M3Proも基本的にM1,M2と同様の制約があるものと思われる
 - MacbookM3Pro上でPlatform:amd64を指定した場合に、DockerDesktop上で低パフォーマンスと警告が出る問題
@@ -192,3 +194,14 @@ $ docker exec -it db mysql -h localhost -u user -ppass event
   - 警告を無くす方向で手段を変えるのか?
     - arm64/v8が使えるイメージを選択するのか
     - その場合SQL8.0のみで5.7は存在しないのか
+
+##### Docker Compose
+
+これまでやってきたことは大まかに下記の3分類
+
+- Dockerfileの記述
+- `image build`
+- `container run`
+
+docker compose(docker-compose.yaml または compose.yml)
+上記のうち**Dockerfile以外の部分**を置き換える
